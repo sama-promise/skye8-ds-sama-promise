@@ -1,3 +1,3 @@
 # skye8-ds-sama-promise
 Data Science internship RoadMap 
-Maintained by [Sama Promise Njemchama], Skye8 Data Science Internship.
+Owned and maintained solely by Sama Promise Njemchama.
