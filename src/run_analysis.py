@@ -4,6 +4,15 @@ from pathlib import Path
 from dataclasses import dataclass
 
 
+@dataclass
+class Config:
+    raw_dir: Path
+    figures_dir: Path
+    report_dir: Path
+    date_cutoff: str = "2026-08-25"
+    max_acceptable_queue_min: int = 30
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run the rural water programme analysis."
@@ -12,6 +21,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--figures", required=True, help="Path to save figures")
     parser.add_argument("--report", required=True, help="Path to save reports")
     return parser.parse_args()
+
+
+def build_config(args: argparse.Namespace) -> Config:
+    return Config(
+        raw_dir=Path(args.raw),
+        figures_dir=Path(args.figures),
+        report_dir=Path(args.report),
+    )
 
 
 def main() -> None:
@@ -23,9 +40,8 @@ def main() -> None:
     logger.info("Starting analysis script...")
 
     args = parse_args()
-    logger.info("Raw data folder: %s", args.raw)
-    logger.info("Figures output folder: %s", args.figures)
-    logger.info("Report output folder: %s", args.report)
+    config = build_config(args)
+    logger.info("Config loaded: %s", config)
 
 
 if __name__ == "__main__":
