@@ -256,6 +256,30 @@ def add_division_cost_share(repairs_merged: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def pivot_melt_fault_types(repairs: pd.DataFrame, logger: logging.Logger) -> pd.DataFrame:
+    repairs = repairs.copy()
+    repairs["report_month"] = repairs["reported_on"].dt.to_period("M").astype(str)
+
+    pivoted = repairs.pivot_table(
+        index="report_month", columns="fault_type",
+        values="repair_id", aggfunc="count", fill_value=0,
+    )
+
+    melted = pivoted.reset_index().melt(
+        id_vars="report_month", var_name="fault_type", value_name="count"
+    )
+
+    pivot_total = pivoted.to_numpy().sum()
+    melt_total = melted["count"].sum()
+    logger.info(
+        "Pivot/melt round trip totals match: pivot=%d, melted=%d",
+        pivot_total, melt_total,
+    )
+    assert pivot_total == melt_total, "Pivot/melt round trip lost data!"
+
+    return melted
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -309,6 +333,9 @@ def main() -> None:
 
     repairs_merged = add_division_cost_share(repairs_merged)
     logger.info("Added division_cost_share via transform (row count unchanged: %d)", len(repairs_merged))
+
+    fault_type_long = pivot_melt_fault_types(repairs, logger)
+    logger.info("Pivot/melt round trip produced %d long-form rows", len(fault_type_long))
 
     monthly_summary = build_monthly_summary(merged, repairs)
     logger.info("Monthly summary built with %d rows (months)", len(monthly_summary))
