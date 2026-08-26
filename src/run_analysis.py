@@ -13,6 +13,16 @@ class MissingColumnError(Exception):
         super().__init__(f"{filename} is missing required column: {column}")
 
 
+class DateParsingError(Exception):
+    def __init__(self, column: str, bad_values: list):
+        self.column = column
+        self.bad_values = bad_values
+        super().__init__(
+            f"Could not parse {len(bad_values)} value(s) in column '{column}': "
+            f"{bad_values[:5]}"
+        )
+
+
 @dataclass
 class Config:
     raw_dir: Path
@@ -46,6 +56,23 @@ def validate_columns(df: pd.DataFrame, required: list[str], filename: str) -> No
             raise MissingColumnError(filename, column)
 
 
+def parse_flexible_date(series: pd.Series, column: str) -> pd.Series:
+    known_formats = ["%Y-%m-%d", "%d %b %Y", "%d/%m/%Y"]
+    parsed = pd.Series(pd.NaT, index=series.index)
+    remaining = series.copy()
+
+    for fmt in known_formats:
+        mask = remaining.notna() & parsed.isna()
+        attempt = pd.to_datetime(remaining[mask], format=fmt, errors="coerce")
+        parsed.loc[attempt.notna().index[attempt.notna()]] = attempt[attempt.notna()]
+
+    still_bad = series[series.notna() & parsed.isna()]
+    if not still_bad.empty:
+        raise DateParsingError(column, still_bad.tolist())
+
+    return parsed
+
+
 def load_water_points(raw_dir: Path) -> pd.DataFrame:
     filename = "water_points.csv"
     df = pd.read_csv(raw_dir / filename)
@@ -54,6 +81,7 @@ def load_water_points(raw_dir: Path) -> pd.DataFrame:
         "depth_m", "households_served", "managed_by", "latitude", "longitude",
     ]
     validate_columns(df, required, filename)
+    df["installed_on"] = parse_flexible_date(df["installed_on"], "installed_on")
     return df
 
 
@@ -65,6 +93,7 @@ def load_inspections(raw_dir: Path) -> pd.DataFrame:
         "water_quality", "queue_minutes", "inspector_id",
     ]
     validate_columns(df, required, filename)
+    df["inspected_on"] = parse_flexible_date(df["inspected_on"], "inspected_on")
     return df
 
 
@@ -76,6 +105,8 @@ def load_repairs(raw_dir: Path) -> pd.DataFrame:
         "fault_type", "cost_xaf", "technician_id", "funded_by",
     ]
     validate_columns(df, required, filename)
+    df["reported_on"] = parse_flexible_date(df["reported_on"], "reported_on")
+    df["fixed_on"] = parse_flexible_date(df["fixed_on"], "fixed_on")
     return df
 
 
