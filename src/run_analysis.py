@@ -110,6 +110,23 @@ def load_repairs(raw_dir: Path) -> pd.DataFrame:
     return df
 
 
+def resolve_duplicate_inspections(
+    inspections: pd.DataFrame, logger: logging.Logger
+) -> pd.DataFrame:
+    subset = ["point_id", "inspected_on"]
+    is_duplicate = inspections.duplicated(subset=subset, keep=False)
+    duplicate_count = is_duplicate.sum()
+    if duplicate_count > 0:
+        logger.warning(
+            "Found %d duplicate inspection row(s) on point_id + inspected_on",
+            duplicate_count,
+        )
+    deduped = inspections.sort_values("inspection_id").drop_duplicates(
+        subset=subset, keep="last"
+    )
+    return deduped
+
+
 def reconcile_orphaned_inspections(
     inspections: pd.DataFrame, water_points: pd.DataFrame, logger: logging.Logger
 ) -> pd.DataFrame:
@@ -154,6 +171,9 @@ def main() -> None:
 
     repairs = load_repairs(config.raw_dir)
     logger.info("Loaded repairs.csv with %d rows", len(repairs))
+
+    inspections = resolve_duplicate_inspections(inspections, logger)
+    logger.info("Inspections after removing duplicates: %d rows", len(inspections))
 
     inspections = reconcile_orphaned_inspections(inspections, water_points, logger)
     logger.info("Inspections after removing orphans: %d rows", len(inspections))
