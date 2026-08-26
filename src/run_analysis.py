@@ -151,6 +151,23 @@ def merge_points_and_inspections(
     return merged
 
 
+def flag_unresolved_repairs(
+    repairs: pd.DataFrame, config: Config, logger: logging.Logger
+) -> pd.DataFrame:
+    repairs = repairs.copy()
+    repairs["is_unresolved"] = repairs["fixed_on"].isna()
+    unresolved_count = repairs["is_unresolved"].sum()
+    logger.warning(
+        "%d repair(s) have no fixed_on date and are treated as still unresolved",
+        unresolved_count,
+    )
+
+    cutoff = pd.Timestamp(config.date_cutoff)
+    effective_end = repairs["fixed_on"].fillna(cutoff)
+    repairs["downtime_days"] = (effective_end - repairs["reported_on"]).dt.days
+    return repairs
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -180,6 +197,12 @@ def main() -> None:
 
     merged = merge_points_and_inspections(water_points, inspections)
     logger.info("Merged water_points + inspections: %d rows", len(merged))
+
+    repairs = flag_unresolved_repairs(repairs, config, logger)
+    logger.info(
+        "Repairs processed: %d total, %d unresolved",
+        len(repairs), repairs["is_unresolved"].sum(),
+    )
 
 
 if __name__ == "__main__":
