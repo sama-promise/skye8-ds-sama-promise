@@ -240,6 +240,22 @@ def build_monthly_summary(
     return combined
 
 
+def add_village_rank(inspections_merged: pd.DataFrame) -> pd.DataFrame:
+    df = inspections_merged.copy()
+    df["village_functionality_rank"] = (
+        df.groupby("village")["functional"]
+        .transform(lambda s: s.rank(ascending=False, method="min"))
+    )
+    return df
+
+
+def add_division_cost_share(repairs_merged: pd.DataFrame) -> pd.DataFrame:
+    df = repairs_merged.copy()
+    division_totals = df.groupby("division")["cost_xaf"].transform("sum")
+    df["division_cost_share"] = df["cost_xaf"] / division_totals
+    return df
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -279,6 +295,9 @@ def main() -> None:
     merged = merge_points_and_inspections(water_points, inspections)
     logger.info("Merged water_points + inspections: %d rows", len(merged))
 
+    merged = add_village_rank(merged)
+    logger.info("Added village_functionality_rank via transform (row count unchanged: %d)", len(merged))
+
     repairs = flag_unresolved_repairs(repairs, config, logger)
     logger.info(
         "Repairs processed: %d total, %d unresolved",
@@ -287,6 +306,9 @@ def main() -> None:
 
     repairs_merged = merge_repairs(merged, repairs)
     logger.info("Merged water_points + repairs: %d rows", len(repairs_merged))
+
+    repairs_merged = add_division_cost_share(repairs_merged)
+    logger.info("Added division_cost_share via transform (row count unchanged: %d)", len(repairs_merged))
 
     monthly_summary = build_monthly_summary(merged, repairs)
     logger.info("Monthly summary built with %d rows (months)", len(monthly_summary))
