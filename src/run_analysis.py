@@ -168,6 +168,17 @@ def flag_unresolved_repairs(
     return repairs
 
 
+def merge_repairs(analysis_table: pd.DataFrame, repairs: pd.DataFrame) -> pd.DataFrame:
+    # Expected cardinality: one water point -> many repairs
+    points_only = analysis_table[
+        ["point_id", "village", "division", "point_type"]
+    ].drop_duplicates(subset="point_id")
+    merged = points_only.merge(
+        repairs, on="point_id", how="left", validate="one_to_many"
+    )
+    return merged
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -203,6 +214,9 @@ def main() -> None:
         "Repairs processed: %d total, %d unresolved",
         len(repairs), repairs["is_unresolved"].sum(),
     )
+
+    repairs_merged = merge_repairs(merged, repairs)
+    logger.info("Merged water_points + repairs: %d rows", len(repairs_merged))
 
 
 if __name__ == "__main__":
