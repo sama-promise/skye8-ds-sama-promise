@@ -3,6 +3,15 @@ import logging
 from pathlib import Path
 from dataclasses import dataclass
 
+import pandas as pd
+
+
+class MissingColumnError(Exception):
+    def __init__(self, filename: str, column: str):
+        self.filename = filename
+        self.column = column
+        super().__init__(f"{filename} is missing required column: {column}")
+
 
 @dataclass
 class Config:
@@ -31,6 +40,23 @@ def build_config(args: argparse.Namespace) -> Config:
     )
 
 
+def validate_columns(df: pd.DataFrame, required: list[str], filename: str) -> None:
+    for column in required:
+        if column not in df.columns:
+            raise MissingColumnError(filename, column)
+
+
+def load_water_points(raw_dir: Path) -> pd.DataFrame:
+    filename = "water_points.csv"
+    df = pd.read_csv(raw_dir / filename)
+    required = [
+        "point_id", "village", "division", "point_type", "installed_on",
+        "depth_m", "households_served", "managed_by", "latitude", "longitude",
+    ]
+    validate_columns(df, required, filename)
+    return df
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -42,6 +68,9 @@ def main() -> None:
     args = parse_args()
     config = build_config(args)
     logger.info("Config loaded: %s", config)
+
+    water_points = load_water_points(config.raw_dir)
+    logger.info("Loaded water_points.csv with %d rows", len(water_points))
 
 
 if __name__ == "__main__":
