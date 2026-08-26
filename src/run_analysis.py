@@ -57,6 +57,28 @@ def load_water_points(raw_dir: Path) -> pd.DataFrame:
     return df
 
 
+def load_inspections(raw_dir: Path) -> pd.DataFrame:
+    filename = "inspections.csv"
+    df = pd.read_csv(raw_dir / filename)
+    required = [
+        "inspection_id", "point_id", "inspected_on", "functional",
+        "water_quality", "queue_minutes", "inspector_id",
+    ]
+    validate_columns(df, required, filename)
+    return df
+
+
+def load_repairs(raw_dir: Path) -> pd.DataFrame:
+    filename = "repairs.csv"
+    df = pd.read_csv(raw_dir / filename)
+    required = [
+        "repair_id", "point_id", "reported_on", "fixed_on",
+        "fault_type", "cost_xaf", "technician_id", "funded_by",
+    ]
+    validate_columns(df, required, filename)
+    return df
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -71,6 +93,12 @@ def main() -> None:
 
     water_points = load_water_points(config.raw_dir)
     logger.info("Loaded water_points.csv with %d rows", len(water_points))
+
+    inspections = load_inspections(config.raw_dir)
+    logger.info("Loaded inspections.csv with %d rows", len(inspections))
+
+    repairs = load_repairs(config.raw_dir)
+    logger.info("Loaded repairs.csv with %d rows", len(repairs))
 
 
 if __name__ == "__main__":
