@@ -110,6 +110,30 @@ def load_repairs(raw_dir: Path) -> pd.DataFrame:
     return df
 
 
+def reconcile_orphaned_inspections(
+    inspections: pd.DataFrame, water_points: pd.DataFrame, logger: logging.Logger
+) -> pd.DataFrame:
+    valid_ids = set(water_points["point_id"])
+    is_orphan = ~inspections["point_id"].isin(valid_ids)
+    orphan_count = is_orphan.sum()
+    if orphan_count > 0:
+        logger.warning(
+            "Dropping %d inspection row(s) referencing unknown point_id values",
+            orphan_count,
+        )
+    return inspections[~is_orphan].copy()
+
+
+def merge_points_and_inspections(
+    water_points: pd.DataFrame, inspections: pd.DataFrame
+) -> pd.DataFrame:
+    # Expected cardinality: one water point -> many inspections
+    merged = water_points.merge(
+        inspections, on="point_id", how="left", validate="one_to_many"
+    )
+    return merged
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -130,6 +154,12 @@ def main() -> None:
 
     repairs = load_repairs(config.raw_dir)
     logger.info("Loaded repairs.csv with %d rows", len(repairs))
+
+    inspections = reconcile_orphaned_inspections(inspections, water_points, logger)
+    logger.info("Inspections after removing orphans: %d rows", len(inspections))
+
+    merged = merge_points_and_inspections(water_points, inspections)
+    logger.info("Merged water_points + inspections: %d rows", len(merged))
 
 
 if __name__ == "__main__":
