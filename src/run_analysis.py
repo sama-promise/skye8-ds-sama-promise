@@ -97,6 +97,27 @@ def load_inspections(raw_dir: Path) -> pd.DataFrame:
     return df
 
 
+def normalize_functional_column(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    true_values = {"yes", "true", "1", "1.0"}
+    df["functional"] = (
+        df["functional"].astype(str).str.strip().str.lower().isin(true_values)
+    )
+    return df
+
+
+def clean_queue_minutes(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    cleaned = (
+        df["queue_minutes"]
+        .astype(str)
+        .str.replace("min", "", regex=False)
+        .str.strip()
+    )
+    df["queue_minutes"] = pd.to_numeric(cleaned, errors="coerce")
+    return df
+
+
 def load_repairs(raw_dir: Path) -> pd.DataFrame:
     filename = "repairs.csv"
     df = pd.read_csv(raw_dir / filename)
@@ -107,6 +128,18 @@ def load_repairs(raw_dir: Path) -> pd.DataFrame:
     validate_columns(df, required, filename)
     df["reported_on"] = parse_flexible_date(df["reported_on"], "reported_on")
     df["fixed_on"] = parse_flexible_date(df["fixed_on"], "fixed_on")
+    return df
+
+
+def clean_cost_xaf(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    cleaned = (
+        df["cost_xaf"]
+        .astype(str)
+        .str.replace(",", "", regex=False)
+        .str.strip()
+    )
+    df["cost_xaf"] = pd.to_numeric(cleaned, errors="coerce")
     return df
 
 
@@ -179,6 +212,34 @@ def merge_repairs(analysis_table: pd.DataFrame, repairs: pd.DataFrame) -> pd.Dat
     return merged
 
 
+def build_monthly_inspection_summary(inspections_merged: pd.DataFrame) -> pd.DataFrame:
+    indexed = inspections_merged.set_index("inspected_on")
+    summary = indexed.resample("ME").agg(
+        functionality_rate=("functional", "mean"),
+        mean_queue_minutes=("queue_minutes", "mean"),
+    )
+    return summary
+
+
+def build_monthly_repair_summary(repairs: pd.DataFrame) -> pd.DataFrame:
+    indexed = repairs.set_index("reported_on")
+    summary = indexed.resample("ME").agg(
+        repairs_reported=("repair_id", "count"),
+        repairs_completed=("is_unresolved", lambda s: (~s).sum()),
+        total_repair_cost=("cost_xaf", "sum"),
+    )
+    return summary
+
+
+def build_monthly_summary(
+    inspections_merged: pd.DataFrame, repairs: pd.DataFrame
+) -> pd.DataFrame:
+    inspection_part = build_monthly_inspection_summary(inspections_merged)
+    repair_part = build_monthly_repair_summary(repairs)
+    combined = inspection_part.join(repair_part, how="outer")
+    return combined
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -197,8 +258,17 @@ def main() -> None:
     inspections = load_inspections(config.raw_dir)
     logger.info("Loaded inspections.csv with %d rows", len(inspections))
 
+    inspections = normalize_functional_column(inspections)
+    logger.info("Normalized functional column to boolean")
+
+    inspections = clean_queue_minutes(inspections)
+    logger.info("Cleaned queue_minutes column to numeric")
+
     repairs = load_repairs(config.raw_dir)
     logger.info("Loaded repairs.csv with %d rows", len(repairs))
+
+    repairs = clean_cost_xaf(repairs)
+    logger.info("Cleaned cost_xaf column to numeric")
 
     inspections = resolve_duplicate_inspections(inspections, logger)
     logger.info("Inspections after removing duplicates: %d rows", len(inspections))
@@ -217,6 +287,10 @@ def main() -> None:
 
     repairs_merged = merge_repairs(merged, repairs)
     logger.info("Merged water_points + repairs: %d rows", len(repairs_merged))
+
+    monthly_summary = build_monthly_summary(merged, repairs)
+    logger.info("Monthly summary built with %d rows (months)", len(monthly_summary))
+    logger.info("Monthly summary preview:\n%s", monthly_summary.head())
 
 
 if __name__ == "__main__":
