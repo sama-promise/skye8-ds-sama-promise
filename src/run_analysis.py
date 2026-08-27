@@ -85,6 +85,18 @@ def load_water_points(raw_dir: Path) -> pd.DataFrame:
     return df
 
 
+def clean_depth_m(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    cleaned = (
+        df["depth_m"]
+        .astype(str)
+        .str.replace("m", "", regex=False)
+        .str.strip()
+    )
+    df["depth_m"] = pd.to_numeric(cleaned, errors="coerce")
+    return df
+
+
 def load_inspections(raw_dir: Path) -> pd.DataFrame:
     filename = "inspections.csv"
     df = pd.read_csv(raw_dir / filename)
@@ -256,6 +268,28 @@ def add_division_cost_share(repairs_merged: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def reduce_memory_footprint(merged: pd.DataFrame, logger: logging.Logger) -> pd.DataFrame:
+    df = merged.copy()
+
+    before_bytes = df.memory_usage(deep=True).sum()
+
+    for col in ["village", "division", "point_type", "managed_by", "water_quality"]:
+        if col in df.columns:
+            df[col] = df[col].astype("category")
+
+    for col in ["depth_m", "households_served", "latitude", "longitude", "queue_minutes"]:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], downcast="float")
+
+    after_bytes = df.memory_usage(deep=True).sum()
+    reduction_pct = 100 * (1 - after_bytes / before_bytes)
+    logger.info(
+        "Memory usage: %d bytes -> %d bytes (%.1f%% reduction)",
+        before_bytes, after_bytes, reduction_pct,
+    )
+    return df
+
+
 def pivot_melt_fault_types(repairs: pd.DataFrame, logger: logging.Logger) -> pd.DataFrame:
     repairs = repairs.copy()
     repairs["report_month"] = repairs["reported_on"].dt.to_period("M").astype(str)
@@ -295,6 +329,9 @@ def main() -> None:
     water_points = load_water_points(config.raw_dir)
     logger.info("Loaded water_points.csv with %d rows", len(water_points))
 
+    water_points = clean_depth_m(water_points)
+    logger.info("Cleaned depth_m column to numeric")
+
     inspections = load_inspections(config.raw_dir)
     logger.info("Loaded inspections.csv with %d rows", len(inspections))
 
@@ -321,6 +358,8 @@ def main() -> None:
 
     merged = add_village_rank(merged)
     logger.info("Added village_functionality_rank via transform (row count unchanged: %d)", len(merged))
+
+    merged = reduce_memory_footprint(merged, logger)
 
     repairs = flag_unresolved_repairs(repairs, config, logger)
     logger.info(
