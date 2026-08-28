@@ -4,7 +4,7 @@ from pathlib import Path
 from dataclasses import dataclass
 
 import pandas as pd
-
+import matplotlib.pyplot as plt
 
 class MissingColumnError(Exception):
     def __init__(self, filename: str, column: str):
@@ -251,6 +251,18 @@ def build_monthly_summary(
     combined = inspection_part.join(repair_part, how="outer")
     return combined
 
+def plot_functionality_by_month(monthly_summary: pd.DataFrame, figures_dir: Path) -> None:
+    figures_dir.mkdir(parents=True, exist_ok=True)
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.plot(monthly_summary.index, monthly_summary["functionality_rate"], marker="o")
+    ax.set_title("Figure 1: Functionality rate by month (2024-2026)\nQuestion: Is there a seasonal pattern in point functionality?")
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Functionality rate")
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(figures_dir / "fig1_functionality_by_month.png", dpi=150)
+    plt.close(fig)
+
 
 def add_village_rank(inspections_merged: pd.DataFrame) -> pd.DataFrame:
     df = inspections_merged.copy()
@@ -379,6 +391,9 @@ def main() -> None:
     monthly_summary = build_monthly_summary(merged, repairs)
     logger.info("Monthly summary built with %d rows (months)", len(monthly_summary))
     logger.info("Monthly summary preview:\n%s", monthly_summary.head())
+
+    plot_functionality_by_month(monthly_summary, config.figures_dir)
+    logger.info("Saved fig1_functionality_by_month.png")
 
 
 if __name__ == "__main__":
