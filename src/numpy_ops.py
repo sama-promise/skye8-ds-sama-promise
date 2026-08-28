@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 
 def min_max_scale(x: np.ndarray) -> np.ndarray:
@@ -9,6 +10,13 @@ def min_max_scale(x: np.ndarray) -> np.ndarray:
 def z_score_standardize(x: np.ndarray) -> np.ndarray:
     x = x.astype(float)
     return (x - x.mean()) / x.std(ddof=0)
+
+
+def queue_time_deviation(point_ids: np.ndarray, queue_minutes: np.ndarray) -> np.ndarray:
+    df = pd.DataFrame({"point_id": point_ids, "queue_minutes": queue_minutes})
+    point_means = df.groupby("point_id")["queue_minutes"].transform("mean")
+    deviation = df["queue_minutes"].to_numpy() - point_means.to_numpy()
+    return deviation
 
 
 if __name__ == "__main__":
@@ -26,3 +34,10 @@ if __name__ == "__main__":
     sk_zscore = StandardScaler().fit_transform(sample.reshape(-1, 1)).ravel()
     zscore_matches = np.allclose(my_zscore, sk_zscore, atol=1e-9)
     print("Z-score matches scikit-learn:", zscore_matches)
+
+    test_points = np.array(["A", "A", "A", "B", "B"])
+    test_queue = np.array([10.0, 20.0, 30.0, 5.0, 15.0])
+    deviations = queue_time_deviation(test_points, test_queue)
+    print("Queue time deviations:", deviations)
+    print("Deviations sum to ~0 per group:", np.allclose(deviations[:3].sum(), 0))
+    
