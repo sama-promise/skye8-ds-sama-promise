@@ -390,6 +390,39 @@ def plot_repair_cost_breakdown(repairs: pd.DataFrame, figures_dir: Path) -> None
     plt.close(fig)
 
 
+def plot_water_points_map(merged: pd.DataFrame, figures_dir: Path) -> None:
+    latest = (
+        merged.sort_values("inspected_on")
+        .drop_duplicates(subset="point_id", keep="last")
+    )
+
+    fig, ax = plt.subplots(figsize=(10, 8))
+    functional_points = latest[latest["functional"] == True]
+    broken_points = latest[latest["functional"] == False]
+
+    ax.scatter(
+        functional_points["longitude"], functional_points["latitude"],
+        s=functional_points["households_served"] * 0.5,
+        c="#4a90d9", alpha=0.6, label="Functional", edgecolors="white",
+    )
+    ax.scatter(
+        broken_points["longitude"], broken_points["latitude"],
+        s=broken_points["households_served"] * 0.5,
+        c="#d94a4a", alpha=0.6, label="Not functional", edgecolors="white",
+    )
+
+    ax.set_title(
+        "Figure 5: Water points by current functionality and households served\n"
+        "Question: Where are the failing points, and how many households do they affect?"
+    )
+    ax.set_xlabel("Longitude")
+    ax.set_ylabel("Latitude")
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(figures_dir / "fig5_water_points_map.png", dpi=150)
+    plt.close(fig)
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -467,6 +500,9 @@ def main() -> None:
 
     plot_repair_cost_breakdown(repairs, config.figures_dir)
     logger.info("Saved fig4_repair_cost_breakdown.png")
+
+    plot_water_points_map(merged, config.figures_dir)
+    logger.info("Saved fig5_water_points_map.png")
 
 
 if __name__ == "__main__":
