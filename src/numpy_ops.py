@@ -19,6 +19,19 @@ def queue_time_deviation(point_ids: np.ndarray, queue_minutes: np.ndarray) -> np
     return deviation
 
 
+def pairwise_distance(coords: np.ndarray) -> np.ndarray:
+    diff = coords[:, np.newaxis, :] - coords[np.newaxis, :, :]
+    distances = np.sqrt((diff ** 2).sum(axis=-1))
+    return distances
+
+
+def nearest_neighbors(coords: np.ndarray, k: int = 3) -> np.ndarray:
+    distances = pairwise_distance(coords)
+    np.fill_diagonal(distances, np.inf)
+    neighbor_indices = np.argsort(distances, axis=1)[:, :k]
+    return neighbor_indices
+
+
 if __name__ == "__main__":
     from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
@@ -40,4 +53,15 @@ if __name__ == "__main__":
     deviations = queue_time_deviation(test_points, test_queue)
     print("Queue time deviations:", deviations)
     print("Deviations sum to ~0 per group:", np.allclose(deviations[:3].sum(), 0))
-    
+
+    test_coords = np.array([
+        [0.0, 0.0],
+        [1.0, 0.0],
+        [0.0, 1.0],
+        [10.0, 10.0],
+    ])
+    dist_matrix = pairwise_distance(test_coords)
+    print("Pairwise distance matrix:\n", dist_matrix)
+
+    neighbors = nearest_neighbors(test_coords, k=2)
+    print("2 nearest neighbors for each point:\n", neighbors)
