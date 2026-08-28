@@ -85,3 +85,13 @@ if __name__ == "__main__":
     print(f"Loop-based time: {loop_time:.4f}s")
     print(f"Vectorized time: {vector_time:.4f}s")
     print(f"Speed-up: {speedup:.1f}x")
+
+    print("\nApplying nearest neighbors to real water point coordinates...")
+    water_points_df = pd.read_csv("data/raw/water_points.csv")
+    real_coords = water_points_df[["latitude", "longitude"]].to_numpy()
+    real_neighbors = nearest_neighbors(real_coords, k=3)
+
+    print(f"Computed 3 nearest neighbors for {len(real_coords)} real water points.")
+    print("Example - point 0's 3 nearest neighbors (by row index):", real_neighbors[0])
+    print("Point 0 coordinates:", real_coords[0])
+    print("Its nearest neighbor coordinates:", real_coords[real_neighbors[0][0]])
