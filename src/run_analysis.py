@@ -368,6 +368,28 @@ def plot_repair_time_distribution(repairs: pd.DataFrame, figures_dir: Path) -> N
     plt.close(fig)
 
 
+def plot_repair_cost_breakdown(repairs: pd.DataFrame, figures_dir: Path) -> None:
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+
+    by_fault = repairs.groupby("fault_type", observed=True)["cost_xaf"].sum().sort_values()
+    axes[0].barh(by_fault.index.astype(str), by_fault.values, color="#4a90d9")
+    axes[0].set_title("By fault type")
+    axes[0].set_xlabel("Total repair cost (XAF)")
+
+    by_funder = repairs.groupby("funded_by", observed=True)["cost_xaf"].sum().sort_values()
+    axes[1].barh(by_funder.index.astype(str), by_funder.values, color="#d97a4a")
+    axes[1].set_title("By funder")
+    axes[1].set_xlabel("Total repair cost (XAF)")
+
+    fig.suptitle(
+        "Figure 4: Repair cost by fault type and by funder\n"
+        "Question: What is driving repair spending, and who is paying for it?"
+    )
+    fig.tight_layout()
+    fig.savefig(figures_dir / "fig4_repair_cost_breakdown.png", dpi=150)
+    plt.close(fig)
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -442,6 +464,9 @@ def main() -> None:
 
     plot_repair_time_distribution(repairs, config.figures_dir)
     logger.info("Saved fig3_repair_time_distribution.png")
+
+    plot_repair_cost_breakdown(repairs, config.figures_dir)
+    logger.info("Saved fig4_repair_cost_breakdown.png")
 
 
 if __name__ == "__main__":
