@@ -6,6 +6,7 @@ from dataclasses import dataclass
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
 class MissingColumnError(Exception):
     def __init__(self, filename: str, column: str):
         self.filename = filename
@@ -251,18 +252,6 @@ def build_monthly_summary(
     combined = inspection_part.join(repair_part, how="outer")
     return combined
 
-def plot_functionality_by_month(monthly_summary: pd.DataFrame, figures_dir: Path) -> None:
-    figures_dir.mkdir(parents=True, exist_ok=True)
-    fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(monthly_summary.index, monthly_summary["functionality_rate"], marker="o")
-    ax.set_title("Figure 1: Functionality rate by month (2024-2026)\nQuestion: Is there a seasonal pattern in point functionality?")
-    ax.set_xlabel("Month")
-    ax.set_ylabel("Functionality rate")
-    ax.grid(True, alpha=0.3)
-    fig.tight_layout()
-    fig.savefig(figures_dir / "fig1_functionality_by_month.png", dpi=150)
-    plt.close(fig)
-
 
 def add_village_rank(inspections_merged: pd.DataFrame) -> pd.DataFrame:
     df = inspections_merged.copy()
@@ -324,6 +313,59 @@ def pivot_melt_fault_types(repairs: pd.DataFrame, logger: logging.Logger) -> pd.
     assert pivot_total == melt_total, "Pivot/melt round trip lost data!"
 
     return melted
+
+
+def plot_functionality_by_month(monthly_summary: pd.DataFrame, figures_dir: Path) -> None:
+    figures_dir.mkdir(parents=True, exist_ok=True)
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.plot(monthly_summary.index, monthly_summary["functionality_rate"], marker="o")
+    ax.set_title(
+        "Figure 1: Functionality rate by month (2024-2026)\n"
+        "Question: Is there a seasonal pattern in point functionality?"
+    )
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Functionality rate")
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(figures_dir / "fig1_functionality_by_month.png", dpi=150)
+    plt.close(fig)
+
+
+def plot_functionality_by_point_type(merged: pd.DataFrame, figures_dir: Path) -> None:
+    by_type = merged.groupby("point_type", observed=True)["functional"].mean().sort_values()
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.barh(by_type.index.astype(str), by_type.values, color="#4a90d9")
+    ax.set_title(
+        "Figure 2: Functionality rate by point type\n"
+        "Question: Which technology holds up, and which does not?"
+    )
+    ax.set_xlabel("Functionality rate")
+    ax.set_xlim(0, 1)
+    fig.tight_layout()
+    fig.savefig(figures_dir / "fig2_functionality_by_point_type.png", dpi=150)
+    plt.close(fig)
+
+
+def plot_repair_time_distribution(repairs: pd.DataFrame, figures_dir: Path) -> None:
+    resolved = repairs.loc[~repairs["is_unresolved"], "downtime_days"]
+    unresolved_count = repairs["is_unresolved"].sum()
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.hist(resolved, bins=20, color="#4a90d9", edgecolor="white", label="Resolved repairs")
+    ax.axvline(
+        resolved.mean(), color="darkorange", linestyle="--",
+        label=f"Mean resolved time: {resolved.mean():.1f} days",
+    )
+    ax.set_title(
+        "Figure 3: Distribution of repair time (reported to fixed)\n"
+        f"Question: How long do repairs take? ({unresolved_count} repairs still unresolved, not shown as a duration)"
+    )
+    ax.set_xlabel("Days from reported to fixed")
+    ax.set_ylabel("Number of repairs")
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(figures_dir / "fig3_repair_time_distribution.png", dpi=150)
+    plt.close(fig)
 
 
 def main() -> None:
@@ -394,6 +436,12 @@ def main() -> None:
 
     plot_functionality_by_month(monthly_summary, config.figures_dir)
     logger.info("Saved fig1_functionality_by_month.png")
+
+    plot_functionality_by_point_type(merged, config.figures_dir)
+    logger.info("Saved fig2_functionality_by_point_type.png")
+
+    plot_repair_time_distribution(repairs, config.figures_dir)
+    logger.info("Saved fig3_repair_time_distribution.png")
 
 
 if __name__ == "__main__":
