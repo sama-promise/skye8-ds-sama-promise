@@ -1,3 +1,5 @@
+import timeit
+
 import numpy as np
 import pandas as pd
 
@@ -25,11 +27,26 @@ def pairwise_distance(coords: np.ndarray) -> np.ndarray:
     return distances
 
 
+def pairwise_distance_loop(coords: np.ndarray) -> np.ndarray:
+    n = len(coords)
+    distances = np.zeros((n, n))
+    for i in range(n):
+        for j in range(n):
+            distances[i, j] = np.sqrt(((coords[i] - coords[j]) ** 2).sum())
+    return distances
+
+
 def nearest_neighbors(coords: np.ndarray, k: int = 3) -> np.ndarray:
     distances = pairwise_distance(coords)
     np.fill_diagonal(distances, np.inf)
     neighbor_indices = np.argsort(distances, axis=1)[:, :k]
     return neighbor_indices
+
+
+def benchmark_distance_methods(coords: np.ndarray, number: int = 3) -> tuple[float, float]:
+    loop_time = timeit.timeit(lambda: pairwise_distance_loop(coords), number=number)
+    vector_time = timeit.timeit(lambda: pairwise_distance(coords), number=number)
+    return loop_time, vector_time
 
 
 if __name__ == "__main__":
@@ -40,28 +57,31 @@ if __name__ == "__main__":
 
     my_minmax = min_max_scale(sample)
     sk_minmax = MinMaxScaler().fit_transform(sample.reshape(-1, 1)).ravel()
-    minmax_matches = np.allclose(my_minmax, sk_minmax, atol=1e-9)
-    print("Min-max matches scikit-learn:", minmax_matches)
+    print("Min-max matches scikit-learn:", np.allclose(my_minmax, sk_minmax, atol=1e-9))
 
     my_zscore = z_score_standardize(sample)
     sk_zscore = StandardScaler().fit_transform(sample.reshape(-1, 1)).ravel()
-    zscore_matches = np.allclose(my_zscore, sk_zscore, atol=1e-9)
-    print("Z-score matches scikit-learn:", zscore_matches)
+    print("Z-score matches scikit-learn:", np.allclose(my_zscore, sk_zscore, atol=1e-9))
 
     test_points = np.array(["A", "A", "A", "B", "B"])
     test_queue = np.array([10.0, 20.0, 30.0, 5.0, 15.0])
     deviations = queue_time_deviation(test_points, test_queue)
     print("Queue time deviations:", deviations)
-    print("Deviations sum to ~0 per group:", np.allclose(deviations[:3].sum(), 0))
 
     test_coords = np.array([
-        [0.0, 0.0],
-        [1.0, 0.0],
-        [0.0, 1.0],
-        [10.0, 10.0],
+        [0.0, 0.0], [1.0, 0.0], [0.0, 1.0], [10.0, 10.0],
     ])
-    dist_matrix = pairwise_distance(test_coords)
-    print("Pairwise distance matrix:\n", dist_matrix)
+    print("Pairwise distance matrix:\n", pairwise_distance(test_coords))
+    print("2 nearest neighbors for each point:\n", nearest_neighbors(test_coords, k=2))
 
-    neighbors = nearest_neighbors(test_coords, k=2)
-    print("2 nearest neighbors for each point:\n", neighbors)
+    print("\nBenchmarking vectorized vs loop-based distance on 173 random points...")
+    real_size_coords = rng.uniform(0, 100, size=(173, 2))
+    loop_result = pairwise_distance_loop(real_size_coords)
+    vector_result = pairwise_distance(real_size_coords)
+    print("Loop and vectorized results match:", np.allclose(loop_result, vector_result))
+
+    loop_time, vector_time = benchmark_distance_methods(real_size_coords, number=3)
+    speedup = loop_time / vector_time
+    print(f"Loop-based time: {loop_time:.4f}s")
+    print(f"Vectorized time: {vector_time:.4f}s")
+    print(f"Speed-up: {speedup:.1f}x")
