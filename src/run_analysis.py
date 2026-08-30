@@ -3,8 +3,11 @@ import logging
 from pathlib import Path
 from dataclasses import dataclass
 
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
+from numpy_ops import nearest_neighbors
 
 
 class MissingColumnError(Exception):
@@ -423,6 +426,35 @@ def plot_water_points_map(merged: pd.DataFrame, figures_dir: Path) -> None:
     plt.close(fig)
 
 
+def plot_neighbor_failure_correlation(merged: pd.DataFrame, figures_dir: Path) -> None:
+    latest = (
+        merged.sort_values("inspected_on")
+        .drop_duplicates(subset="point_id", keep="last")
+        .reset_index(drop=True)
+    )
+    coords = latest[["latitude", "longitude"]].to_numpy()
+    neighbor_idx = nearest_neighbors(coords, k=3)
+
+    functional = latest["functional"].to_numpy()
+    neighbor_failure_rate = np.array([
+        1 - functional[neighbor_idx[i]].mean() for i in range(len(latest))
+    ])
+    own_status = np.where(functional, "Functional", "Not functional")
+
+    fig, ax = plt.subplots(figsize=(9, 6))
+    categories = ["Functional", "Not functional"]
+    data = [neighbor_failure_rate[own_status == cat] for cat in categories]
+    ax.boxplot(data, tick_labels=categories)
+    ax.set_title(
+        "Figure 6: Neighbor failure rate by a point's own status\n"
+        "Question: Do failing points cluster near other failing points?"
+    )
+    ax.set_ylabel("Failure rate among 3 nearest neighbors")
+    fig.tight_layout()
+    fig.savefig(figures_dir / "fig6_neighbor_failure_correlation.png", dpi=150)
+    plt.close(fig)
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -503,6 +535,9 @@ def main() -> None:
 
     plot_water_points_map(merged, config.figures_dir)
     logger.info("Saved fig5_water_points_map.png")
+
+    plot_neighbor_failure_correlation(merged, config.figures_dir)
+    logger.info("Saved fig6_neighbor_failure_correlation.png")
 
 
 if __name__ == "__main__":
