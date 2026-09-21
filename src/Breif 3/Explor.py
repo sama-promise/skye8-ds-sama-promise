@@ -235,3 +235,156 @@ axes[1].set_title("Normal Q-Q plot (log model)")
 plt.tight_layout()
 plt.savefig("residuals_log_model.png")
 print("saved residuals_log_model.png")
+
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+vif_predictors = known[["bedrooms", "bathrooms", "area_sqm", "building_age_years", "floor"]].copy()
+vif_predictors["intercept"] = 1
+
+vif_data = pd.DataFrame()
+vif_data["predictor"] = vif_predictors.columns
+vif_data["VIF"] = [variance_inflation_factor(vif_predictors.values, i) for i in range(vif_predictors.shape[1])]
+print(vif_data)
+
+formula_no_bedrooms = log_formula.replace("bedrooms + ", "")
+formula_no_area = log_formula.replace("area_sqm + ", "")
+
+model_no_bedrooms = smf.ols(formula_no_bedrooms, data=known).fit()
+model_no_area = smf.ols(formula_no_area, data=known).fit()
+
+print("--- Both predictors ---")
+print("area_sqm coef:", log_model.params["area_sqm"], "se:", log_model.bse["area_sqm"])
+print("bedrooms coef:", log_model.params["bedrooms"], "se:", log_model.bse["bedrooms"])
+
+print("--- area_sqm only (bedrooms dropped) ---")
+print("area_sqm coef:", model_no_bedrooms.params["area_sqm"], "se:", model_no_bedrooms.bse["area_sqm"])
+
+print("--- bedrooms only (area_sqm dropped) ---")
+print("bedrooms coef:", model_no_area.params["bedrooms"], "se:", model_no_area.bse["bedrooms"])
+
+influence = log_model.get_influence()
+cooks_d = influence.cooks_distance[0]
+leverage = influence.hat_matrix_diag
+
+known["cooks_d"] = cooks_d
+known["leverage"] = leverage
+
+threshold = 4 / len(known)
+influential = known[known["cooks_d"] > threshold]
+print("influential listings (Cook's D > 4/n):", len(influential))
+print(influential[["listing_id", "city", "neighbourhood", "area_sqm", "monthly_rent_xaf", "cooks_d"]].sort_values("cooks_d", ascending=False).head(10))
+
+known_clean = known.drop(influential.index)
+log_model_clean = smf.ols(log_formula, data=known_clean).fit()
+
+comparison = pd.DataFrame({
+    "original": log_model.params,
+    "without_influential": log_model_clean.params
+})
+comparison["pct_change"] = ((comparison["without_influential"] - comparison["original"]) / comparison["original"].abs()) * 100
+print(comparison.sort_values("pct_change", key=abs, ascending=False).head(15))
+
+example = known.iloc[[0]].copy()  # pick any real listing as your worked example
+pred = log_model.get_prediction(example)
+summary_frame = pred.summary_frame(alpha=0.05)
+print(summary_frame)
+
+ci_low_xaf = np.exp(summary_frame["mean_ci_lower"].values[0])
+ci_high_xaf = np.exp(summary_frame["mean_ci_upper"].values[0])
+pi_low_xaf = np.exp(summary_frame["obs_ci_lower"].values[0])
+pi_high_xaf = np.exp(summary_frame["obs_ci_upper"].values[0])
+point_estimate_xaf = np.exp(summary_frame["mean"].values[0])
+
+print("point estimate (XAF):", point_estimate_xaf)
+print("95% CI for mean rent (XAF):", ci_low_xaf, ci_high_xaf)
+print("95% prediction interval for this flat (XAF):", pi_low_xaf, pi_high_xaf)
+
+from sklearn.model_selection import train_test_split
+
+train, test = train_test_split(known, test_size=0.2, random_state=42)
+
+train_model = smf.ols(log_formula, data=train).fit()
+
+test_pred_log = train_model.predict(test)
+test_pred_xaf = np.exp(test_pred_log)
+actual_xaf = test["monthly_rent_xaf"]
+
+errors = actual_xaf - test_pred_xaf
+mae = errors.abs().mean()
+rmse = np.sqrt((errors ** 2).mean())
+mape = (errors.abs() / actual_xaf).mean() * 100
+
+print("MAE (XAF):", mae)
+print("RMSE (XAF):", rmse)
+print("MAPE (%):", mape)
+
+fig, ax = plt.subplots(figsize=(7, 7))
+ax.scatter(actual_xaf, test_pred_xaf, alpha=0.3, s=10)
+lims = [0, max(actual_xaf.max(), test_pred_xaf.max())]
+ax.plot(lims, lims, color="red", linewidth=1)
+ax.set_xlabel("actual rent (XAF)")
+ax.set_ylabel("predicted rent (XAF)")
+ax.set_title("Predicted vs actual (holdout)")
+plt.tight_layout()
+plt.savefig("predicted_vs_actual.png")
+print("saved predicted_vs_actual.png")
+
+coef_summary = log_model.summary2().tables[1]
+coef_summary = coef_summary.drop("Intercept")
+coef_summary = coef_summary.sort_values("Coef.")
+
+fig, ax = plt.subplots(figsize=(9, 14))
+ax.errorbar(
+    coef_summary["Coef."], range(len(coef_summary)),
+    xerr=[coef_summary["Coef."] - coef_summary["[0.025"], coef_summary["0.975]"] - coef_summary["Coef."]],
+    fmt="o", markersize=4, capsize=3
+)
+ax.axvline(0, color="red", linewidth=1, linestyle="--")
+ax.set_yticks(range(len(coef_summary)))
+ax.set_yticklabels(coef_summary.index, fontsize=7)
+ax.set_xlabel("coefficient (log scale) with 95% CI")
+ax.set_title("Log-model coefficients with confidence intervals")
+plt.tight_layout()
+plt.savefig("coefficient_plot.png")
+print("saved coefficient_plot.png")
+
+def estimate_rent(model, bedrooms, bathrooms, area_sqm, building_age_years, floor,
+                   has_generator, has_borehole, tiled, gated_security, furnished,
+                   property_type, neighbourhood):
+    input_row = pd.DataFrame([{
+        "bedrooms": bedrooms, "bathrooms": bathrooms, "area_sqm": area_sqm,
+        "building_age_years": building_age_years, "floor": floor,
+        "has_generator": has_generator, "has_borehole": has_borehole,
+        "tiled": tiled, "gated_security": gated_security, "furnished": furnished,
+        "property_type": property_type, "neighbourhood": neighbourhood,
+    }])
+    pred = model.get_prediction(input_row)
+    summary_frame = pred.summary_frame(alpha=0.05)
+    point = np.exp(summary_frame["mean"].values[0])
+    low = np.exp(summary_frame["obs_ci_lower"].values[0])
+    high = np.exp(summary_frame["obs_ci_upper"].values[0])
+    return point, low, high
+
+
+if __name__ == "__main__":
+    print("--- Rent Estimator ---")
+    bedrooms = int(input("Bedrooms: "))
+    bathrooms = int(input("Bathrooms: "))
+    area_sqm = float(input("Area (sqm): "))
+    building_age_years = int(input("Building age (years): "))
+    floor = int(input("Floor: "))
+    has_generator = input("Has generator? (y/n): ").lower() == "y"
+    has_borehole = input("Has borehole? (y/n): ").lower() == "y"
+    tiled = input("Tiled? (y/n): ").lower() == "y"
+    gated_security = input("Gated security? (y/n): ").lower() == "y"
+    furnished = input("Furnished? (y/n): ").lower() == "y"
+    property_type = input("Property type (apartment/chambre moderne/duplex/studio/villa): ")
+    neighbourhood = input("Neighbourhood: ")
+
+    point, low, high = estimate_rent(
+        log_model, bedrooms, bathrooms, area_sqm, building_age_years, floor,
+        has_generator, has_borehole, tiled, gated_security, furnished,
+        property_type, neighbourhood
+    )
+    print(f"\nEstimated rent: {point:,.0f} XAF")
+    print(f"Likely range (95% prediction interval): {low:,.0f} - {high:,.0f} XAF")
