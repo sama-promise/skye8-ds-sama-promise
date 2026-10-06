@@ -81,6 +81,9 @@ optimizer = torch.optim.Adam(
 
 EPOCHS = 20
 
+best_train_mae = float("inf")
+best_state = None
+
 for epoch in range(EPOCHS):
     model.train()
     total_loss_kg = 0
@@ -101,7 +104,14 @@ for epoch in range(EPOCHS):
     avg_loss_kg = total_loss_kg / len(train_dataset)
     print(f"Epoch {epoch+1}/{EPOCHS} - Train MAE: {avg_loss_kg:.1f} kg")
 
+    if avg_loss_kg < best_train_mae:
+        best_train_mae = avg_loss_kg
+        best_state = {k: v.clone() for k, v in model.state_dict().items()}
+
 print("Training loop finished.")
+
+model.load_state_dict(best_state)
+print(f"Restored model from best epoch (Train MAE: {best_train_mae:.1f} kg)")
 
 # --- Evaluate on the held-out test set ---
 model.eval()
@@ -111,9 +121,9 @@ with torch.no_grad():
     for images, weights in test_loader:
         images, weights = images.to(device), weights.to(device)
         predictions_norm = model(images).squeeze(1)
-        predictions_kg = predictions_norm * train_std + train_mean  # undo normalization
+        predictions_kg = predictions_norm * train_std + train_mean
         all_preds_kg.extend(predictions_kg.cpu().numpy())
         all_actuals_kg.extend(weights.cpu().numpy())
 
 test_mae = mean_absolute_error(all_actuals_kg, all_preds_kg)
-print(f"\nTest MAE (CNN, raw photos, last-layer-only fine-tune): {test_mae:.1f} kg")
+print(f"\nTest MAE (CNN, raw photos, last-layer-only fine-tune, best epoch): {test_mae:.1f} kg")
