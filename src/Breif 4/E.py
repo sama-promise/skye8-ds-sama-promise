@@ -9,7 +9,7 @@ DATA_DIR = HERE / "data" / "raw" / "Cattle side and back view images"
 measurements = pd.read_excel(DATA_DIR / "measurements.xlsx")
 print(measurements.head())
 
-animal_num = 1
+animal_num = 3
 row = measurements[measurements["Num"] == animal_num]
 weight = row["Body weight (kg)"].values[0]
 
