@@ -1,0 +1,233 @@
+{
+  "n_animals": 72,
+  "weight_range_kg": [
+    341.0,
+    644.0
+  ],
+  "baseline_mae_kg": 73.3202782819117,
+  "interval_levels": [
+    0.8,
+    0.9
+  ],
+  "default_interval_level": 0.8,
+  "models": {
+    "girth": {
+      "label": "Heart girth only",
+      "features": [
+        "Heart girth(cm)"
+      ],
+      "coef": [
+        6.923416511709555
+      ],
+      "intercept": -796.448699443888,
+      "feature_range": {
+        "Heart girth(cm)": [
+          167.0,
+          221.0
+        ]
+      },
+      "mae_kg": 28.165768546940846,
+      "intervals": {
+        "0.80": {
+          "low_offset": -42.77068731605618,
+          "high_offset": 42.77068731605618
+        },
+        "0.90": {
+          "low_offset": -68.077021269218,
+          "high_offset": 68.077021269218
+        }
+      },
+      "error_by_band": {
+        "light": {
+          "from_kg": 341.0,
+          "to_kg": 444.0,
+          "mae_kg": 23.81596800361072,
+          "bias_kg": 11.520823841154415
+        },
+        "middle": {
+          "from_kg": 445.0,
+          "to_kg": 507.0,
+          "mae_kg": 23.707143176072787,
+          "bias_kg": 11.379497936791514
+        },
+        "heavy": {
+          "from_kg": 511.0,
+          "to_kg": 644.0,
+          "mae_kg": 36.90883208294656,
+          "bias_kg": -22.90800589903493
+        }
+      }
+    },
+    "length_height": {
+      "label": "Body length + withers height",
+      "features": [
+        "Oblique body length (cm)",
+        "Withers height(cm)"
+      ],
+      "coef": [
+        4.546902066313821,
+        5.102440656063173
+      ],
+      "intercept": -827.9583382555907,
+      "feature_range": {
+        "Oblique body length (cm)": [
+          127.0,
+          174.0
+        ],
+        "Withers height(cm)": [
+          100.0,
+          137.0
+        ]
+      },
+      "mae_kg": 25.806884393734613,
+      "intervals": {
+        "0.80": {
+          "low_offset": -67.80417229620343,
+          "high_offset": 67.80417229620343
+        },
+        "0.90": {
+          "low_offset": -112.27663897621983,
+          "high_offset": 112.27663897621983
+        }
+      },
+      "error_by_band": {
+        "light": {
+          "from_kg": 341.0,
+          "to_kg": 444.0,
+          "mae_kg": 24.717981433959654,
+          "bias_kg": 19.747109215624306
+        },
+        "middle": {
+          "from_kg": 445.0,
+          "to_kg": 507.0,
+          "mae_kg": 26.367174542496105,
+          "bias_kg": 1.8761122305302156
+        },
+        "heavy": {
+          "from_kg": 511.0,
+          "to_kg": 644.0,
+          "mae_kg": 26.340730946804115,
+          "bias_kg": -22.453237964954894
+        }
+      }
+    },
+    "girth_length": {
+      "label": "Heart girth + body length",
+      "features": [
+        "Heart girth(cm)",
+        "Oblique body length (cm)"
+      ],
+      "coef": [
+        4.528062714600427,
+        3.0822369791530733
+      ],
+      "intercept": -826.7645707097713,
+      "feature_range": {
+        "Heart girth(cm)": [
+          167.0,
+          221.0
+        ],
+        "Oblique body length (cm)": [
+          127.0,
+          174.0
+        ]
+      },
+      "mae_kg": 26.41888539757938,
+      "intervals": {
+        "0.80": {
+          "low_offset": -36.36457895857029,
+          "high_offset": 36.36457895857029
+        },
+        "0.90": {
+          "low_offset": -83.2991996085027,
+          "high_offset": 83.2991996085027
+        }
+      },
+      "error_by_band": {
+        "light": {
+          "from_kg": 341.0,
+          "to_kg": 444.0,
+          "mae_kg": 25.288272674885008,
+          "bias_kg": 12.805284844415922
+        },
+        "middle": {
+          "from_kg": 445.0,
+          "to_kg": 507.0,
+          "mae_kg": 24.16662867663976,
+          "bias_kg": 1.582658007585593
+        },
+        "heavy": {
+          "from_kg": 511.0,
+          "to_kg": 644.0,
+          "mae_kg": 29.963923139827113,
+          "bias_kg": -16.225579269132453
+        }
+      }
+    },
+    "all": {
+      "label": "All four measurements",
+      "features": [
+        "Heart girth(cm)",
+        "Oblique body length (cm)",
+        "Withers height(cm)",
+        "Hip length (cm)"
+      ],
+      "coef": [
+        3.3859262771700394,
+        2.9904214761082017,
+        2.792740680700739,
+        -1.7958619831290645
+      ],
+      "intercept": -857.6523817496213,
+      "feature_range": {
+        "Heart girth(cm)": [
+          167.0,
+          221.0
+        ],
+        "Oblique body length (cm)": [
+          127.0,
+          174.0
+        ],
+        "Withers height(cm)": [
+          100.0,
+          137.0
+        ],
+        "Hip length (cm)": [
+          29.0,
+          51.0
+        ]
+      },
+      "mae_kg": 21.48309627727488,
+      "intervals": {
+        "0.80": {
+          "low_offset": -41.528165576091396,
+          "high_offset": 41.528165576091396
+        },
+        "0.90": {
+          "low_offset": -82.21331173425187,
+          "high_offset": 82.21331173425187
+        }
+      },
+      "error_by_band": {
+        "light": {
+          "from_kg": 341.0,
+          "to_kg": 444.0,
+          "mae_kg": 17.979454624454235,
+          "bias_kg": 10.529398730086134
+        },
+        "middle": {
+          "from_kg": 445.0,
+          "to_kg": 507.0,
+          "mae_kg": 20.030693004928384,
+          "bias_kg": 4.490582956218702
+        },
+        "heavy": {
+          "from_kg": 511.0,
+          "to_kg": 644.0,
+          "mae_kg": 26.415795528770264,
+          "bias_kg": -16.095290170449488
+        }
+      }
+    }
+  }
+}
