@@ -1,0 +1,174 @@
+point_id,village,division,point_type,installed_on,depth_m,households_served,managed_by,latitude,longitude
+WP-0001,Bafut,Mezam,standpipe,2009-04-16,50.4 m,133,CAMWATER,6.11505,10.59335
+WP-0002,Bafut,Mezam,protected spring,2009-07-09,58.4 m,201,council,5.97663,10.67461
+WP-0003,Bafut,Mezam,standpipe,2016-10-02,43.2,417,village water committee,6.11847,10.32372
+WP-0004,Bafut,Mezam,shallow well,2024-06-10,44.7,337,village water committee,6.47739,10.22828
+WP-0005,Bafut,Mezam,protected spring,2023-04-14,58.5,369,village water committee,5.84644,10.74722
+WP-0006,Bali,Mezam,borehole with handpump,2017-01-30,28.7 m,326,council,5.97407,9.96847
+WP-0007,Bali,Mezam,borehole with handpump,2011-10-29,30.5,355,CAMWATER,6.33516,10.46047
+WP-0008,Bali,Mezam,standpipe,2021-01-07,27.7,56,village water committee,6.20741,10.0749
+WP-0009,Bali,Mezam,protected spring,2022-09-09,,36,NGO-supported,6.35388,10.09686
+WP-0010,Bali,Mezam,gravity scheme tap,2023-03-27,,351,council,6.10645,10.60107
+WP-0011,Bali,Mezam,borehole with handpump,2020-09-08,48.3 m,388,village water committee,5.82031,10.32322
+WP-0012,Bali,Mezam,standpipe,2015-03-13,59.2,85,village water committee,6.28923,10.69284
+WP-0013,Bali,Mezam,gravity scheme tap,2017-09-18,,266,village water committee,6.11962,9.8949
+WP-0014,Bali,Mezam,borehole with handpump,2012-04-03,58.3 m,143,village water committee,6.5244,10.56501
+WP-0015,Bali,Mezam,borehole with handpump,2008-07-27,13.9 m,93,church mission,6.1544,10.20993
+WP-0016,Bali,Mezam,shallow well,2021-02-01,,192,NGO-supported,6.42875,9.92985
+WP-0017,Bali,Mezam,borehole with handpump,2023-10-10,61.4 m,218,church mission,6.01636,10.08413
+WP-0018,Santa,Mezam,borehole with handpump,2018-08-29,,159,village water committee,6.29843,9.85862
+WP-0019,Santa,Mezam,borehole with handpump,2016-09-08,28.4,143,council,5.84865,10.35673
+WP-0020,Santa,Mezam,protected spring,2017-12-11,39.8 m,403,CAMWATER,6.54726,10.57831
+WP-0021,Santa,Mezam,shallow well,2023-02-21,,29,CAMWATER,6.02434,10.58371
+WP-0022,Santa,Mezam,shallow well,2017-09-02,27.0 m,37,village water committee,6.23549,10.28504
+WP-0023,Santa,Mezam,gravity scheme tap,2024-09-13,,61,NGO-supported,6.31477,10.72827
+WP-0024,Santa,Mezam,protected spring,2010-08-29,65.0,361,CAMWATER,5.8364,10.65894
+WP-0025,Santa,Mezam,protected spring,2010-05-14,,307,church mission,6.28665,10.74246
+WP-0026,Santa,Mezam,borehole with handpump,2016-12-23,41.4,55,council,5.79923,10.3898
+WP-0027,Santa,Mezam,borehole with handpump,2024-11-11,25.9 m,121,council,6.48222,10.5057
+WP-0028,Santa,Mezam,shallow well,2015-07-02,60.8 m,126,CAMWATER,6.37926,9.97029
+WP-0029,Santa,Mezam,gravity scheme tap,2017-12-03,,175,church mission,6.18636,9.91783
+WP-0030,Tubah,Mezam,standpipe,2023-01-18,,348,church mission,6.09524,10.2014
+WP-0031,Tubah,Mezam,borehole with handpump,02/08/2008,42.1,406,council,6.44377,10.02433
+WP-0032,Tubah,Mezam,shallow well,2018-08-19,31.9,350,village water committee,6.16091,10.16267
+WP-0033,Tubah,Mezam,borehole with handpump,2019-02-10,23.4,333,church mission,6.12528,10.15033
+WP-0034,Tubah,Mezam,borehole with handpump,11/03/2015,63.7,274,NGO-supported,6.40063,10.58837
+WP-0035,Tubah,Mezam,gravity scheme tap,2020-02-22,15.6,134,NGO-supported,6.08576,10.68271
+WP-0036,Tubah,Mezam,standpipe,2017-06-05,12.1 m,156,church mission,6.287,10.38699
+WP-0037,Tubah,Mezam,shallow well,29/01/2021,46.1,406,village water committee,6.15564,10.58324
+WP-0038,Tubah,Mezam,standpipe,2008-03-30,,148,NGO-supported,6.19054,9.90605
+WP-0039,Tubah,Mezam,shallow well,2017-06-04,,217,NGO-supported,6.26332,10.12667
+WP-0040,Tubah,Mezam,protected spring,2016-10-16,,55,village water committee,6.44914,10.57482
+WP-0041,Tubah,Mezam,shallow well,2021-01-01,,319,village water committee,5.89118,9.88153
+WP-0042,Bambui,Mezam,protected spring,2008-11-13,45.2 m,58,council,6.10107,10.51414
+WP-0043,Bambui,Mezam,protected spring,2015-03-23,,121,village water committee,6.33116,10.6126
+WP-0044,Bambui,Mezam,shallow well,2011-01-09,30.4 m,388,church mission,5.89625,9.97217
+WP-0045,Bambui,Mezam,gravity scheme tap,2022-07-31,62.0 m,259,NGO-supported,6.02508,10.16654
+WP-0046,Bambui,Mezam,gravity scheme tap,2008-05-12,59.5,310,CAMWATER,6.13257,10.51613
+WP-0047,Bambui,Mezam,gravity scheme tap,2020-02-06,42.7,290,village water committee,6.44468,10.17085
+WP-0048,Bambui,Mezam,gravity scheme tap,2016-05-05,,83,village water committee,5.92085,10.59258
+WP-0049,Bambui,Mezam,shallow well,2021-10-27,51.3 m,396,CAMWATER,5.76006,10.3384
+WP-0050,Kumbo,Bui,borehole with handpump,2011-12-21,,110,CAMWATER,6.52824,10.17071
+WP-0051,Kumbo,Bui,standpipe,25/02/2014,52.8,318,council,5.78775,10.49149
+WP-0052,Kumbo,Bui,gravity scheme tap,06/03/2019,39.6 m,16,village water committee,6.37942,10.61627
+WP-0053,Kumbo,Bui,gravity scheme tap,2019-02-04,7.9 m,408,CAMWATER,6.2852,10.52948
+WP-0054,Kumbo,Bui,protected spring,2019-08-24,29.2 m,98,council,5.78529,10.19184
+WP-0055,Kumbo,Bui,standpipe,2020-02-12,20.9 m,258,village water committee,6.44892,9.84435
+WP-0056,Jakiri,Bui,gravity scheme tap,21/03/2021,40.6 m,311,village water committee,6.34451,10.16751
+WP-0057,Jakiri,Bui,gravity scheme tap,2020-09-18,32.9,153,CAMWATER,6.49404,10.7103
+WP-0058,Jakiri,Bui,standpipe,2021-01-30,58.8 m,228,CAMWATER,6.30337,10.15176
+WP-0059,Jakiri,Bui,gravity scheme tap,17/03/2018,53.6 m,37,CAMWATER,5.78001,9.83269
+WP-0060,Oku,Bui,borehole with handpump,2010-07-19,,219,church mission,6.13062,10.47721
+WP-0061,Oku,Bui,standpipe,2018-12-11,,373,village water committee,6.39503,10.17668
+WP-0062,Oku,Bui,shallow well,2015-08-16,,408,church mission,5.93893,10.73267
+WP-0063,Oku,Bui,borehole with handpump,2021-03-31,,79,council,5.89802,10.08978
+WP-0064,Oku,Bui,gravity scheme tap,2018-09-10,,114,council,6.19792,10.48063
+WP-0065,Oku,Bui,standpipe,2011-06-25,24.6 m,45,village water committee,5.85532,10.41735
+WP-0066,Oku,Bui,standpipe,2020-03-06,63.0,138,village water committee,5.84059,9.82398
+WP-0067,Oku,Bui,protected spring,2013-08-21,58.2 m,45,village water committee,5.87325,10.38008
+WP-0068,Ndop,Ngo-Ketunjia,protected spring,2018-07-20,59.0 m,206,NGO-supported,6.16906,9.88697
+WP-0069,Ndop,Ngo-Ketunjia,gravity scheme tap,29/04/2009,53.8,313,village water committee,6.43934,10.43139
+WP-0070,Ndop,Ngo-Ketunjia,protected spring,2014-05-23,26.1,68,council,5.83715,10.51214
+WP-0071,Ndop,Ngo-Ketunjia,shallow well,2010-06-03,,58,NGO-supported,6.3144,10.67851
+WP-0072,Ndop,Ngo-Ketunjia,standpipe,2008-08-03,34.8 m,95,village water committee,6.34402,10.72832
+WP-0073,Ndop,Ngo-Ketunjia,gravity scheme tap,2019-09-08,53.7,112,church mission,5.80774,9.90861
+WP-0074,Ndop,Ngo-Ketunjia,protected spring,2024-06-18,64.7 m,44,CAMWATER,6.39329,10.6196
+WP-0075,Ndop,Ngo-Ketunjia,shallow well,2024-02-16,32.4 m,373,village water committee,5.88996,10.61192
+WP-0076,Ndop,Ngo-Ketunjia,borehole with handpump,11/11/2010,,137,NGO-supported,6.08728,10.58385
+WP-0077,Ndop,Ngo-Ketunjia,standpipe,2020-04-08,9.9 m,279,church mission,6.46301,9.80646
+WP-0078,Babessi,Ngo-Ketunjia,protected spring,2010-02-09,61.4,80,village water committee,6.19238,10.02658
+WP-0079,Babessi,Ngo-Ketunjia,gravity scheme tap,2012-05-16,33.2 m,370,council,6.48455,10.29177
+WP-0080,Babessi,Ngo-Ketunjia,standpipe,2009-12-18,15.7,318,village water committee,6.25168,10.61055
+WP-0081,Babessi,Ngo-Ketunjia,borehole with handpump,2008-04-10,,88,NGO-supported,6.41175,9.91475
+WP-0082,Balikumbat,Ngo-Ketunjia,gravity scheme tap,2019-04-19,59.4 m,342,NGO-supported,5.77676,10.21228
+WP-0083,Balikumbat,Ngo-Ketunjia,standpipe,2014-06-02,53.2 m,268,NGO-supported,5.83176,10.6213
+WP-0084,Balikumbat,Ngo-Ketunjia,shallow well,2014-12-08,15.8,36,village water committee,6.41701,10.04124
+WP-0085,Balikumbat,Ngo-Ketunjia,standpipe,2017-12-13,30.2,85,council,6.46026,10.25572
+WP-0086,Balikumbat,Ngo-Ketunjia,shallow well,2014-08-24,8.0,132,NGO-supported,5.89048,10.16494
+WP-0087,Balikumbat,Ngo-Ketunjia,protected spring,2017-04-08,,267,CAMWATER,6.18694,9.87646
+WP-0088,Balikumbat,Ngo-Ketunjia,protected spring,2024-04-19,50.8 m,417,church mission,6.54163,10.56713
+WP-0089,Balikumbat,Ngo-Ketunjia,shallow well,2016-01-28,,180,NGO-supported,6.32519,10.53737
+WP-0090,Wum,Menchum,shallow well,2008-03-10,14.4,384,church mission,6.02566,10.20866
+WP-0091,Wum,Menchum,gravity scheme tap,2023-02-20,,60,NGO-supported,6.42489,10.13388
+WP-0092,Wum,Menchum,shallow well,2011-07-26,33.1,368,village water committee,6.43097,9.94889
+WP-0093,Wum,Menchum,standpipe,2014-11-19,44.0 m,88,church mission,6.41778,10.71492
+WP-0094,Wum,Menchum,borehole with handpump,2008-07-25,47.1 m,43,village water committee,6.30557,10.16121
+WP-0095,Wum,Menchum,standpipe,2015-09-10,61.4 m,96,village water committee,5.96629,10.03087
+WP-0096,Wum,Menchum,gravity scheme tap,2017-08-01,11.1 m,145,church mission,6.30435,10.33187
+WP-0097,Wum,Menchum,gravity scheme tap,2016-10-21,7.0,251,council,6.35709,9.89192
+WP-0098,Wum,Menchum,gravity scheme tap,2024-06-04,37.8 m,304,council,6.27537,10.48171
+WP-0099,Wum,Menchum,gravity scheme tap,2023-08-14,33.0,328,church mission,5.78396,10.67239
+WP-0100,Wum,Menchum,shallow well,2014-09-20,,92,village water committee,6.00003,10.5306
+WP-0101,Wum,Menchum,borehole with handpump,2009-09-25,,57,church mission,6.29164,10.40917
+WP-0102,Zhoa,Menchum,gravity scheme tap,2022-02-11,54.9,105,church mission,5.94671,10.12649
+WP-0103,Zhoa,Menchum,borehole with handpump,19/11/2022,43.6 m,163,church mission,6.48448,10.10469
+WP-0104,Zhoa,Menchum,gravity scheme tap,2016-01-09,9.5,214,NGO-supported,5.87947,9.84076
+WP-0105,Zhoa,Menchum,protected spring,2014-05-31,,394,village water committee,5.97459,9.87064
+WP-0106,Zhoa,Menchum,shallow well,2018-08-23,,363,CAMWATER,6.23398,9.9368
+WP-0107,Zhoa,Menchum,standpipe,08/05/2015,50.6 m,25,council,5.95017,10.00206
+WP-0108,Zhoa,Menchum,borehole with handpump,2023-04-19,,248,church mission,6.38058,10.31522
+WP-0109,Zhoa,Menchum,gravity scheme tap,2011-03-24,,318,NGO-supported,6.28164,10.33255
+WP-0110,Zhoa,Menchum,borehole with handpump,2008-07-24,,400,CAMWATER,5.8033,9.92561
+WP-0111,Zhoa,Menchum,shallow well,2010-05-14,,163,CAMWATER,6.23729,10.0691
+WP-0112,Zhoa,Menchum,shallow well,2020-03-16,43.2 m,136,council,6.37833,10.19209
+WP-0113,Zhoa,Menchum,borehole with handpump,2013-06-18,48.3 m,134,village water committee,6.36716,10.01523
+WP-0114,Fundong,Boyo,protected spring,2009-05-31,22.7 m,317,village water committee,6.54813,9.97187
+WP-0115,Fundong,Boyo,standpipe,2011-09-01,,204,village water committee,5.97733,10.49026
+WP-0116,Fundong,Boyo,gravity scheme tap,13/04/2012,10.5,330,church mission,6.16087,10.6663
+WP-0117,Fundong,Boyo,standpipe,2017-12-08,21.2 m,289,village water committee,6.19114,10.27462
+WP-0118,Belo,Boyo,borehole with handpump,2014-03-04,,189,NGO-supported,6.32314,10.12297
+WP-0119,Belo,Boyo,protected spring,2010-09-13,62.8,394,CAMWATER,6.31378,10.65548
+WP-0120,Belo,Boyo,standpipe,2012-09-16,15.7 m,78,CAMWATER,6.14846,10.17412
+WP-0121,Belo,Boyo,protected spring,2012-09-24,47.4 m,29,church mission,6.15817,9.90615
+WP-0122,Belo,Boyo,shallow well,2019-02-06,48.7,289,NGO-supported,5.80653,9.84595
+WP-0123,Belo,Boyo,borehole with handpump,09/09/2018,34.5,122,village water committee,6.36958,9.84304
+WP-0124,Belo,Boyo,shallow well,2018-05-20,,367,CAMWATER,6.25259,10.55044
+WP-0125,Belo,Boyo,gravity scheme tap,2022-01-13,,312,council,6.36876,9.83044
+WP-0126,Belo,Boyo,gravity scheme tap,14/12/2024,24.8 m,271,council,5.75169,9.89597
+WP-0127,Belo,Boyo,borehole with handpump,2023-12-14,,51,church mission,6.40669,10.07076
+WP-0128,Njinikom,Boyo,standpipe,2023-06-06,64.3,203,NGO-supported,6.38976,10.30906
+WP-0129,Njinikom,Boyo,standpipe,2010-09-29,14.3 m,81,CAMWATER,5.87764,10.08857
+WP-0130,Njinikom,Boyo,protected spring,2011-03-29,,18,village water committee,6.26347,10.72294
+WP-0131,Njinikom,Boyo,protected spring,2019-01-28,,34,council,5.9071,10.51341
+WP-0132,Njinikom,Boyo,borehole with handpump,2024-10-07,,337,village water committee,5.94731,10.49362
+WP-0133,Njinikom,Boyo,protected spring,2015-06-12,34.6,141,village water committee,6.10588,9.87512
+WP-0134,Njinikom,Boyo,protected spring,08/02/2020,55.5,293,village water committee,6.25435,10.38027
+WP-0135,Njinikom,Boyo,shallow well,2022-01-17,49.3,407,CAMWATER,6.05231,10.35587
+WP-0136,Mbengwi,Momo,borehole with handpump,2014-06-01,32.5,233,council,6.31575,9.98482
+WP-0137,Mbengwi,Momo,standpipe,2014-04-22,40.5 m,201,church mission,5.83715,9.9423
+WP-0138,Mbengwi,Momo,standpipe,2018-01-29,,260,CAMWATER,6.18848,10.37748
+WP-0139,Mbengwi,Momo,borehole with handpump,2010-02-13,,43,CAMWATER,6.03165,10.21679
+WP-0140,Mbengwi,Momo,shallow well,2009-08-02,,234,CAMWATER,5.85998,10.5758
+WP-0141,Mbengwi,Momo,protected spring,10/03/2011,45.2,70,NGO-supported,6.29153,10.60155
+WP-0142,Mbengwi,Momo,borehole with handpump,2009-06-28,,134,village water committee,6.47413,10.20491
+WP-0143,Mbengwi,Momo,protected spring,2022-10-14,15.2,286,village water committee,6.52793,10.37657
+WP-0144,Batibo,Momo,borehole with handpump,2010-04-07,30.7 m,94,church mission,6.1068,10.66435
+WP-0145,Batibo,Momo,borehole with handpump,03/03/2022,16.3 m,399,village water committee,6.43484,10.52379
+WP-0146,Batibo,Momo,protected spring,2020-04-13,30.9,34,council,6.01647,10.50583
+WP-0147,Batibo,Momo,borehole with handpump,2010-04-21,,295,village water committee,6.30733,9.82121
+WP-0148,Batibo,Momo,protected spring,2014-09-29,,43,CAMWATER,6.18175,10.50676
+WP-0149,Batibo,Momo,gravity scheme tap,2019-04-30,20.9,324,council,5.98755,10.44173
+WP-0150,Batibo,Momo,gravity scheme tap,2017-01-23,29.6 m,300,NGO-supported,5.99824,10.56253
+WP-0151,Batibo,Momo,gravity scheme tap,2020-05-22,,367,church mission,6.16826,10.05243
+WP-0152,Batibo,Momo,borehole with handpump,2022-10-16,39.8 m,322,village water committee,5.89877,10.10914
+WP-0153,Batibo,Momo,standpipe,2016-02-29,,22,CAMWATER,6.0629,10.61931
+WP-0154,Batibo,Momo,shallow well,2010-04-07,34.1,55,village water committee,5.81749,10.43846
+WP-0155,Batibo,Momo,gravity scheme tap,2024-07-28,,110,village water committee,6.16688,9.85776
+WP-0156,Nkambe,Donga-Mantung,protected spring,2024-10-12,,119,village water committee,6.35319,10.10052
+WP-0157,Nkambe,Donga-Mantung,standpipe,2020-09-19,30.9 m,189,village water committee,6.41083,9.93456
+WP-0158,Nkambe,Donga-Mantung,standpipe,2015-03-04,9.8 m,345,village water committee,6.38284,10.7478
+WP-0159,Nkambe,Donga-Mantung,protected spring,2008-10-28,,208,NGO-supported,6.02179,10.30403
+WP-0160,Nkambe,Donga-Mantung,borehole with handpump,2020-07-27,,327,church mission,5.88269,10.72011
+WP-0161,Nkambe,Donga-Mantung,borehole with handpump,2021-05-27,,387,church mission,5.88631,10.40802
+WP-0162,Nkambe,Donga-Mantung,protected spring,2014-03-26,,122,church mission,6.05314,10.27186
+WP-0163,Nkambe,Donga-Mantung,borehole with handpump,2008-02-25,32.1,360,church mission,6.07584,10.65699
+WP-0164,Nkambe,Donga-Mantung,gravity scheme tap,2024-07-11,30.5 m,142,church mission,6.19403,10.1335
+WP-0165,Ndu,Donga-Mantung,gravity scheme tap,15/03/2020,,26,village water committee,5.98754,10.07014
+WP-0166,Ndu,Donga-Mantung,gravity scheme tap,2012-01-27,26.5,102,church mission,6.08776,10.59413
+WP-0167,Ndu,Donga-Mantung,gravity scheme tap,2012-05-23,26.2,340,CAMWATER,5.86658,9.81409
+WP-0168,Ndu,Donga-Mantung,protected spring,2009-08-31,,98,NGO-supported,6.0312,9.94046
+WP-0169,Ndu,Donga-Mantung,gravity scheme tap,2021-04-05,51.4 m,159,village water committee,6.40817,10.72458
+WP-0170,Ndu,Donga-Mantung,borehole with handpump,2010-05-18,62.0 m,377,NGO-supported,6.36568,10.54091
+WP-0171,Ndu,Donga-Mantung,shallow well,2023-05-31,28.6 m,230,council,5.75379,10.00044
+WP-0172,Ndu,Donga-Mantung,protected spring,2023-07-21,12.2,267,NGO-supported,6.00758,10.48852
+WP-0173,Ndu,Donga-Mantung,gravity scheme tap,2024-07-12,36.1,322,village water committee,5.86961,10.05846
